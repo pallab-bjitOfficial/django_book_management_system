@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.response import Response
 from .models import Author
@@ -7,7 +6,7 @@ from rest_framework import status
 
 
 class AuthorViewSet(viewsets.ModelViewSet):
-    def list(self, request):
+    def list(self, _):
         book_list = Author.objects.all()
         serializer = AuthorSerializer(book_list, many=True)
         response_data = {
@@ -24,7 +23,7 @@ class AuthorViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def retrieve(self, request, pk=None):
+    def retrieve(self, _, pk=None):
         author = Author.objects.get(pk=pk)
         serializer = AuthorSerializer(author)
         return Response(serializer.data, status=status.HTTP_200_OK)
