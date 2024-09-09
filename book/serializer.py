@@ -16,12 +16,11 @@ class BookSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate_title(self, value):
-        if len(value) < 5:
-            raise serializers.ValidationError(
-                'Book title should be greater than 5 characters')
+
         if Book.objects.filter(title=value).exists():
             raise serializers.ValidationError(
                 'Book with this title already exists')
+
         return value
 
     def validate_price(self, value):
