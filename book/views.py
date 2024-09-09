@@ -3,13 +3,18 @@ from rest_framework.response import Response
 from .models import Book
 from .serializer import BookSerializer, BookListSerializer
 from rest_framework import status
+from .utils import generate_filter
 
 
 class BookViewSet(viewsets.ModelViewSet):
 
-    def list(self, _):
-        book_list = Book.objects.all().select_related('author').order_by('-created_at')
-
+    def list(self, request):
+        filters = generate_filter(request)
+        if filters:
+            book_list = Book.objects.filter(filters).select_related(
+                'author').order_by('-created_at')
+        else:
+            book_list = Book.objects.all().select_related('author').order_by('-created_at')
         serializer = BookListSerializer(book_list, many=True)
         response_data = {
             'message': 'All Books',
