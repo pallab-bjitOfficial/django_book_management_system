@@ -23,3 +23,8 @@ class AuthorViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def retrieve(self, request, pk=None):
+        author = Author.objects.get(pk=pk)
+        serializer = AuthorSerializer(author)
+        return Response(serializer.data, status=status.HTTP_200_OK)
